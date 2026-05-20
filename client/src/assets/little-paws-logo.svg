@@ -1,0 +1,43 @@
+<svg width="720" height="220" viewBox="0 0 720 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="lp-bg" x1="28" y1="24" x2="196" y2="196" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FB7185"/>
+      <stop offset="1" stop-color="#F59E0B"/>
+    </linearGradient>
+    <linearGradient id="lp-text" x1="250" y1="56" x2="608" y2="170" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E11D48"/>
+      <stop offset="1" stop-color="#D97706"/>
+    </linearGradient>
+    <filter id="lp-shadow" x="0" y="0" width="240" height="240" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+      <feOffset dy="10"/>
+      <feGaussianBlur stdDeviation="14"/>
+      <feColorMatrix type="matrix" values="0 0 0 0 0.882353 0 0 0 0 0.341176 0 0 0 0 0.227451 0 0 0 0.18 0"/>
+      <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_1"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_1" result="shape"/>
+    </filter>
+  </defs>
+
+  <g filter="url(#lp-shadow)">
+    <rect x="28" y="24" width="168" height="168" rx="42" fill="url(#lp-bg)"/>
+    <ellipse cx="78" cy="80" rx="16" ry="20" fill="#FFF7ED"/>
+    <ellipse cx="113" cy="61" rx="16" ry="20" transform="rotate(-10 113 61)" fill="#FFF7ED"/>
+    <ellipse cx="150" cy="61" rx="16" ry="20" transform="rotate(10 150 61)" fill="#FFF7ED"/>
+    <ellipse cx="146" cy="98" rx="16" ry="20" fill="#FFF7ED"/>
+    <path d="M111.572 98.365C126.613 86.689 149.387 86.689 164.428 98.365C179.469 110.042 180.693 134.142 167.143 147.249L128 186L88.8567 147.249C75.3075 134.142 76.531 110.042 91.5723 98.365C106.614 86.689 129.387 86.689 144.428 98.365" fill="#FFF7ED"/>
+    <path d="M127.999 168.995L101.751 143.201C92.7668 134.515 92.2712 120.097 100.626 111.053C108.725 102.286 122.299 101.149 131.733 108.4L135.148 111.025L138.576 108.4C148.022 101.15 161.589 102.286 169.689 111.053C178.044 120.097 177.548 134.515 168.564 143.201L142.315 168.995L135.292 175.899C131.24 179.882 124.758 179.882 120.706 175.899L127.999 168.995Z" fill="#E11D48" fill-opacity="0.18"/>
+    <path d="M96 121C96 103.327 110.327 89 128 89C145.673 89 160 103.327 160 121C160 138.673 145.673 153 128 153C110.327 153 96 138.673 96 121Z" fill="#FFF7ED"/>
+    <path d="M128 137.5L116.245 125.899C111.721 121.534 111.481 114.215 115.695 109.564C119.738 105.102 126.611 104.575 131.297 108.354L128 111.641L124.703 108.354C120.017 104.575 113.144 105.102 109.101 109.564C104.887 114.215 105.127 121.534 109.651 125.899L128 144L146.349 125.899C150.873 121.534 151.113 114.215 146.899 109.564C142.856 105.102 135.983 104.575 131.297 108.354L128 111.641L124.703 108.354" fill="#E11D48"/>
+  </g>
+
+  <text x="242" y="96" fill="url(#lp-text)" font-family="Poppins, Segoe UI, Arial, sans-serif" font-size="54" font-weight="800" letter-spacing="2">
+    LITTLE
+  </text>
+  <text x="242" y="154" fill="#334155" font-family="Poppins, Segoe UI, Arial, sans-serif" font-size="58" font-weight="900" letter-spacing="2.5">
+    PAWS
+  </text>
+  <text x="244" y="187" fill="#64748B" font-family="Poppins, Segoe UI, Arial, sans-serif" font-size="18" font-weight="500" letter-spacing="4">
+    ADOPT • RESCUE • CARE
+  </text>
+</svg>

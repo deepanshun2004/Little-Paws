@@ -1,0 +1,9 @@
+{
+  "name": "little-paws",
+  "private": true,
+  "scripts": {
+    "test": "npm --prefix client test && npm --prefix server test",
+    "test:client": "npm --prefix client test",
+    "test:server": "npm --prefix server test"
+  }
+}
