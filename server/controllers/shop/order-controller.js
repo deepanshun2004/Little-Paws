@@ -170,6 +170,13 @@ const createOrder = async (req, res) => {
 const getAllOrdersByUser = async (req, res) => {
   try {
     const { userId } = req.params;
+    if (String(req.user.id) !== String(userId)) {
+      return res.status(403).json({
+        success: false,
+        message: "You can view only your own orders.",
+      });
+    }
+
     const orders = await Order.find({ userId });
 
     res.status(200).json({
@@ -214,6 +221,13 @@ const getOrderDetails = async (req, res) => {
       return res.status(404).json({
         success: false,
         message: "Order not found!",
+      });
+    }
+
+    if (req.user.role === "user" && String(order.userId) !== String(req.user.id)) {
+      return res.status(403).json({
+        success: false,
+        message: "You can view only your own orders.",
       });
     }
 

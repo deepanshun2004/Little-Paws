@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import axios from "axios";
 import { 
   CheckCircle, 
@@ -7,7 +7,6 @@ import {
   PawPrint,
   AlertTriangle,
   Trash2,
-  Eye,
   MapPin,
   Calendar,
   MessageCircle,
@@ -88,7 +87,7 @@ function ApplicationStatus() {
   const { toast } = useToast();
   const { on, off } = useSocket();
 
-  const fetchStatusData = async () => {
+  const fetchStatusData = useCallback(async () => {
     setIsLoading(true);
     try {
       const [applicationsResponse, reportsResponse] = await Promise.all([
@@ -111,25 +110,85 @@ function ApplicationStatus() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [toast]);
 
   useEffect(() => {
     fetchStatusData();
-  }, []);
+  }, [fetchStatusData]);
 
   useEffect(() => {
-    const handleRealtimeUpdate = () => {
+    const handleAdoptionUpdate = (payload) => {
+      const updatedApplication = payload?.adoption || payload?.application || payload;
+      if (updatedApplication?._id) {
+        setApplications((current) => {
+          const normalizedApplication = {
+            ...updatedApplication,
+            petDetails: updatedApplication.petDetails || updatedApplication.pet,
+            shelterDetails: updatedApplication.shelterDetails || updatedApplication.shelter,
+          };
+          const existingIndex = current.findIndex(
+            (item) => String(item._id) === String(normalizedApplication._id)
+          );
+
+          if (existingIndex === -1) {
+            return [normalizedApplication, ...current];
+          }
+
+          return current.map((item) =>
+            String(item._id) === String(normalizedApplication._id)
+              ? {
+                  ...item,
+                  ...normalizedApplication,
+                  petDetails: normalizedApplication.petDetails || item.petDetails,
+                  shelterDetails: normalizedApplication.shelterDetails || item.shelterDetails,
+                }
+              : item
+          );
+        });
+      }
+
       fetchStatusData();
     };
 
-    on("adoption_updated", handleRealtimeUpdate);
-    on("stray_updated", handleRealtimeUpdate);
+    const handleStrayUpdate = (payload) => {
+      const updatedReport = payload?.report || payload?.pet || payload;
+      if (updatedReport?._id) {
+        setReports((current) => {
+          const normalizedReport = {
+            ...updatedReport,
+            shelterDetails: updatedReport.shelterDetails || updatedReport.shelter,
+          };
+          const existingIndex = current.findIndex(
+            (item) => String(item._id) === String(normalizedReport._id)
+          );
+
+          if (existingIndex === -1) {
+            return [normalizedReport, ...current];
+          }
+
+          return current.map((item) =>
+            String(item._id) === String(normalizedReport._id)
+              ? {
+                  ...item,
+                  ...normalizedReport,
+                  shelterDetails: normalizedReport.shelterDetails || item.shelterDetails,
+                }
+              : item
+          );
+        });
+      }
+
+      fetchStatusData();
+    };
+
+    on("adoption_updated", handleAdoptionUpdate);
+    on("stray_updated", handleStrayUpdate);
 
     return () => {
-      off("adoption_updated", handleRealtimeUpdate);
-      off("stray_updated", handleRealtimeUpdate);
+      off("adoption_updated", handleAdoptionUpdate);
+      off("stray_updated", handleStrayUpdate);
     };
-  }, [on, off]);
+  }, [fetchStatusData, on, off]);
 
   const withdrawAdoption = async (application) => {
     const reason = window.prompt("Optional withdrawal reason:", application.withdrawalReason || "");

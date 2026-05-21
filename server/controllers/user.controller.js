@@ -124,6 +124,7 @@ const getReportedStrays = async (req, res) => {
   try {
     const { id: userId } = req.user;
     const reportedPets = await Pet.find({ foster: userId });
+    reportedPets.sort((a, b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
 
     res.status(200).json({
       success: true,
@@ -148,6 +149,7 @@ const getApplicationStatus = async (req, res) => {
 
     
     const adoptionForms = await AdoptionForm.find({ user: userId });
+    adoptionForms.sort((a, b) => new Date(b.submissionDate || b.createdAt || 0) - new Date(a.submissionDate || a.createdAt || 0));
 
     res.status(200).json({
       success: true,

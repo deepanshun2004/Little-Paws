@@ -57,6 +57,32 @@ const shoppingOrderSlice = createSlice({
     resetOrderDetails: (state) => {
       state.orderDetails = null;
     },
+    upsertOrderInList: (state, action) => {
+      const updatedOrder = action.payload;
+      if (!updatedOrder?._id) {
+        return;
+      }
+
+      const existingIndex = state.orderList.findIndex(
+        (order) => String(order._id) === String(updatedOrder._id)
+      );
+
+      if (existingIndex >= 0) {
+        state.orderList[existingIndex] = {
+          ...state.orderList[existingIndex],
+          ...updatedOrder,
+        };
+      } else {
+        state.orderList.unshift(updatedOrder);
+      }
+
+      if (String(state.orderDetails?._id) === String(updatedOrder._id)) {
+        state.orderDetails = {
+          ...state.orderDetails,
+          ...updatedOrder,
+        };
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -76,7 +102,7 @@ const shoppingOrderSlice = createSlice({
       })
       .addCase(getAllOrdersByUserId.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.orderList = action.payload.data;
+        state.orderList = action.payload.data || [];
       })
       .addCase(getAllOrdersByUserId.rejected, (state) => {
         state.isLoading = false;
@@ -96,6 +122,6 @@ const shoppingOrderSlice = createSlice({
   },
 });
 
-export const { resetOrderDetails } = shoppingOrderSlice.actions;
+export const { resetOrderDetails, upsertOrderInList } = shoppingOrderSlice.actions;
 
 export default shoppingOrderSlice.reducer;

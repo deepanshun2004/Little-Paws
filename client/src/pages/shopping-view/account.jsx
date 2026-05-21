@@ -6,7 +6,7 @@ import banner4 from "@/assets/banner4.webp";
 import banner5 from "@/assets/banner5.webp";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchWishlist } from "@/store/shop/products-slice";
-import { getAllOrdersByUserId, getOrderDetails, resetOrderDetails } from "@/store/shop/order-slice";
+import { getAllOrdersByUserId, getOrderDetails, resetOrderDetails, upsertOrderInList } from "@/store/shop/order-slice";
 import NotificationsPanel from "@/components/common/NotificationsPanel";
 import AdminChatPanel from "@/components/common/AdminChatPanel";
 import ShoppingOrderDetailsView from "@/components/shopping-view/order-details";
@@ -43,10 +43,15 @@ function CustomOrders() {
     registerSocketUser(user);
 
     const refreshOrders = async (orderPayload) => {
-      if (String(orderPayload?.userId) !== String(user.id)) {
+      const belongsToCurrentUser =
+        String(orderPayload?.userId) === String(user.id) ||
+        orderList.some((order) => String(order._id) === String(orderPayload?._id));
+
+      if (!belongsToCurrentUser) {
         return;
       }
 
+      dispatch(upsertOrderInList(orderPayload));
       dispatch(getAllOrdersByUserId(user.id));
 
       if (openDetailsDialog && String(orderDetails?._id) === String(orderPayload?._id)) {
@@ -61,7 +66,7 @@ function CustomOrders() {
       unsubscribeCreated();
       unsubscribeUpdated();
     };
-  }, [dispatch, openDetailsDialog, orderDetails?._id, user?.id]);
+  }, [dispatch, openDetailsDialog, orderDetails?._id, orderList, user]);
   
   const getStatusStyle = (status) => {
     const statusMap = {
