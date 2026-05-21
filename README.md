@@ -1,533 +1,304 @@
-# LITTLE_PAWS - Complete Project Analysis
+# 🐾 LITTLE_PAWS - Full-Stack Pet Adoption & E-Commerce Platform
 
-## 📋 Project Overview
+[![Production Deployment](https://img.shields.io/badge/Deployment-Production--Ready-brightgreen.svg)](#-production-deployment-setup)
+[![Stack](https://img.shields.io/badge/Stack-MERN%20(MySQL)--React-blue.svg)](#-technology-stack)
+[![License](https://img.shields.io/badge/License-ISC-orange.svg)](LICENSE)
 
-**Project Name:** LITTLE_PAWS  
-**Author:** Deepanshu 
-**License:** ISC  
-**Type:** Full-Stack Web Application (MERN-like)  
-**Purpose:** Pet adoption platform with shelter management, pet search, and e-commerce features
+Little Paws is a premium full-stack web application that serves as a centralized hub for pet adoption, shelter administration, stray pet reporting, real-time community chat, and e-commerce for pet supplies. Developed by **Deepanshu**, this production-ready application integrates modern technologies to provide an engaging, responsive, and seamless experience for pet lovers and shelter managers alike.
 
 ---
 
-## 🏗️ Architecture Overview
+## 🏗️ Deployment & System Architecture
 
-### Technology Stack
+The application is architected as a decoupled client-server system designed for horizontal scalability, high availability, and secure cross-origin communication.
 
-#### **Frontend**
-- **Framework:** React 18.3.1
-- **Build Tool:** Vite 5.4.10
-- **State Management:** Redux Toolkit (@reduxjs/toolkit 2.3.0)
-- **Routing:** React Router DOM 6.28.0
-- **UI Library:** 
-  - Radix UI (components)
-  - Tailwind CSS 3.4.14
-  - Lucide React (icons)
-  - Custom UI components (shadcn/ui style)
-- **Real-time Communication:** Socket.io-client 4.8.1
-- **HTTP Client:** Axios 1.7.7
-- **Authentication:** Firebase 12.13.0
-- **Maps:** Leaflet & React-Leaflet (for location-based features)
-- **CSS-in-JS:** Tailwind + PostCSS
+```mermaid
+graph TD
+    Client[Vercel Frontend: React + Vite] <-->|HTTPS / REST API / WS| Server[Render Backend: Node.js + Express]
+    Server <-->|SQL Queries| DB[Railway Hosted MySQL / Local MySQL]
+    Server -->|OAuth Verification| Firebase[Firebase Admin Auth]
+    Server -->|Payment Capture| Razorpay[Razorpay Payment API]
+    Server -->|SMTP TLS| Nodemailer[Nodemailer SMTP Service]
+    Server -->|Local Disk Storage| Uploads[Multer /uploads Directory]
+    Server -->|Event Log Queue| Kafka[KafkaJS Event Broker]
+```
 
-#### **Backend**
-- **Runtime:** Node.js
-- **Framework:** Express 4.21.1
-- **Real-time:** Socket.io 4.8.1
-- **Database:** MySQL 2 (mysql2 3.14.5)
-- **Authentication:**
-  - JWT (jsonwebtoken 9.0.2)
-  - Firebase Admin 13.9.0
-  - bcryptjs 2.4.3 (password hashing)
-- **File Management:**
-  - Multer 1.4.5 (local file uploads)
-  - Express static `/uploads` serving
-- **Email:** Nodemailer 8.0.7
-- **Payment:** Razorpay 2.9.6
-- **Message Queue:** Kafka (kafkajs 2.2.4)
-- **Google APIs:** googleapis 171.4.0
-- **Utilities:**
-  - dotenv (environment config)
-  - CORS support
-  - Cookie Parser
+### Deployment Strategy
+- **Frontend Hosting:** Deployed on **Vercel** for lightning-fast CDN delivery, automatic SSL termination, and seamless edge-routing.
+- **Backend Hosting:** Deployed on **Render** (Web Service instance) running Node.js with persistent/local directory bindings for static uploads.
+- **Production Database:** Deployed on **Railway MySQL**, utilizing connection pooling for optimized query latency and high concurrency support.
+- **Local Development:** Fully supports a standard local **MySQL** server instance, allowing offline testing and rapid feature iteration.
+
+---
+
+## 🛠️ Technology Stack
+
+### Frontend (Client)
+* **Framework:** React 18.3.1 (configured with Vite 5.4.10)
+* **State Management:** Redux Toolkit (@reduxjs/toolkit 2.3.0) for centralized auth, cart, address, and checkout states.
+* **Routing:** React Router DOM 6.28.0 for dynamic, declarative client-side routes.
+* **Real-time Engine:** Socket.io-client 4.8.1 for active bidirectional communication.
+* **Styling & Components:** Tailwind CSS 3.4.14, Radix UI primitive modules, Lucide React icons, and a custom Tailwind component system.
+* **Authentication:** Firebase Client SDK 12.13.0 (handling Google OAuth login).
+* **Maps & Geo-location:** Leaflet and React-Leaflet for stray reports and shelter location pinpointing.
+
+### Backend (Server)
+* **Runtime:** Node.js
+* **Framework:** Express 4.21.1 (handling REST API, cookies, JSON payloads, and CORS policies).
+* **Database Driver:** MySQL 2 (`mysql2` 3.14.5) with a custom ORM-like `BaseModel` class.
+* **Real-time Server:** Socket.io 4.8.1 (implementing role-based and user-specific rooms).
+* **Security & Authentication:** JSON Web Tokens (`jsonwebtoken` 9.0.2), `bcryptjs` 2.4.3 for database password hashing, and Firebase Admin 13.9.0.
+* **Storage & Uploads:** Multer 1.4.5 for handling multipart form data (saving to local `/uploads` directory).
+* **Email System:** **Nodemailer 8.0.7** configured with secure Gmail SMTP authentication.
+* **Payment Integration:** Razorpay SDK 2.9.6 for order creation and transaction verification.
+* **Message Broker:** KafkaJS 2.2.4 (Kafka producer hooks for decoupling async background event logging).
+
+---
+
+## 🐾 Key Features & User Experience
+
+### 1. Pet Discovery & Search
+- Advanced search filter parameters (location, animal type, age group, size, health status).
+- Location-based pet radius detection utilizing integrated Leaflet map interfaces.
+- Custom cards with high-fidelity animations, micro-interactions, and detailed profile sheets.
+
+### 2. Streamlined Pet Adoption
+- Comprehensive multi-step digital adoption form (assessing housing, lifestyle, and history).
+- Application progress tracker in the user dashboard with withdraw/update capabilities.
+- Live notifications as applications move from "Pending" to "Reviewing", "Approved", or "Declined".
+
+### 3. Shelter Administration Portal
+- Protected analytics and listing dashboard specifically designed for shelter operators.
+- Complete CRUD capabilities for pets, real-time adopter application workflow management, and shelter profile curation.
+- Interactive, multi-room chat console to directly message applicants in real time.
+
+### 4. Stray Pet Reporting System
+- Geo-pinning: Click directly on the Leaflet Map to capture coordinates of a stray animal.
+- Photo uploads and status labels (Pending, Approved, Under Rescue, Rescued) for transparency.
+- Automatic notifications to shelter groups within the corresponding city radius.
+
+### 5. E-Commerce Shopping Core
+- Comprehensive pet supplies catalog with categories, reviews, star ratings, and wishlists.
+- Fully-functional shopping cart and smooth Razorpay payment gateway integration.
+- Secure customer address book management and order-tracking dashboard.
+
+### 6. Real-Time Chat & In-App Notifications
+- Direct Socket.IO messaging with full message persistence in MySQL.
+- Role-based emissions: Send instant notifications to all active shelter administrators or e-commerce operators at once.
+- Email triggers via **Nodemailer** for critical events: password resets, welcome messages, order confirmations, and adoption status updates.
 
 ---
 
 ## 📁 Directory Structure
 
-### Frontend (`client/`)
-```
-client/
-├── src/
-│   ├── components/          # React components
-│   │   ├── admin-view/      # Admin dashboard components
-│   │   ├── auth/            # Authentication components
-│   │   ├── common/          # Shared components
-│   │   ├── main-*/          # Feature-specific components
-│   │   ├── shopping-view/   # E-commerce UI
-│   │   └── ui/              # Reusable UI elements
-│   ├── pages/               # Page components (routes)
-│   │   ├── auth/            # Login, Register, Password Reset
-│   │   ├── main-*/          # Main feature pages
-│   │   ├── admin-view/      # Admin pages
-│   │   ├── shopping-view/   # E-commerce pages
-│   │   └── unauth-page/     # Unauthorized page
-│   ├── store/               # Redux store configuration
-│   │   ├── auth-slice/      # Authentication state
-│   │   └── shop/            # E-commerce state slices
-│   ├── hooks/               # Custom React hooks
-│   │   ├── use-socket.js    # Socket.io integration
-│   │   └── use-toast.js     # Toast notifications
-│   ├── lib/                 # Utility libraries
-│   │   ├── firebase.js      # Firebase initialization
-│   │   ├── socket.js        # Socket utilities
-│   │   ├── image.js         # Image processing
-│   │   └── utils.js         # Helper functions
-│   ├── config/              # Application config
-│   ├── assets/              # Static assets
-│   ├── App.jsx              # Root component
-│   └── main.jsx             # Entry point
-├── package.json             # Dependencies
-├── vite.config.js           # Vite configuration
-├── tailwind.config.js       # Tailwind CSS config
-├── eslint.config.js         # ESLint rules
-└── index.html               # HTML template
-```
-
-### Backend (`server/`)
-```
-server/
-├── models/                  # Database models
-│   ├── User.js             # User model
-│   ├── pets.model.js       # Pet listings
-│   ├── adoptionForm.model.js # Adoption applications
-│   ├── shelter.model.js    # Shelter information
-│   ├── Cart.js             # Shopping cart
-│   ├── Product.js          # E-commerce products
-│   ├── Order.js            # Orders
-│   ├── Payment.js          # Payment records
-│   ├── Chat.js             # Chat messages
-│   ├── Message.js          # Message model
-│   ├── Notification.js     # User notifications
-│   ├── Address.js          # Shipping/delivery addresses
-│   ├── Review.js           # Product reviews
-│   ├── Wishlist.js         # User wishlists
-│   └── _base.js            # Base model class
-├── controllers/            # Business logic
-│   ├── auth/
-│   │   └── auth-controller.js
-│   ├── shop/               # E-commerce controllers
-│   │   ├── products-controller.js
-│   │   ├── cart-controller.js
-│   │   ├── order-controller.js
-│   │   ├── payment-controller.js
-│   │   └── address-controller.js
-│   ├── pet.controller.js
-│   ├── user.controller.js
-│   ├── chat.controller.js
-│   ├── notification.controller.js
-│   ├── applications.controller.js
-│   ├── shelterPetController.js
-│   ├── shelterWorkflowController.js
-│   └── admin/              # Admin controllers
-├── routes/                 # API endpoints
-│   ├── auth/
-│   │   └── auth-routes.js
-│   ├── shop/               # E-commerce routes
-│   ├── allpets.js
-│   ├── adoption.routes.js
-│   ├── chat.routes.js
-│   ├── notification.routes.js
-│   ├── user.routes.js
-│   ├── shelter.routes.js
-│   ├── shelterAdmin.js
-│   ├── order.routes.js
-│   └── admin/              # Admin routes
-├── middlewares/
-│   └── auth.middleware.js  # Authentication & authorization
-├── helpers/                # Utility helpers
-│   ├── upload.js           # Multer upload configuration
-│   ├── firebaseAdmin.js    # Firebase admin SDK
-│   ├── kafkaProducer.js    # Kafka producer
-│   ├── mail.service.js     # Email service
-│   └── notifications.js    # Notification service
-├── db/
-│   └── mysql.js            # MySQL connection & initialization
-├── config/
-│   └── mail.js             # Nodemailer configuration
-├── utils/
-│   └── sendEmail.js        # Email sending utility
-├── server.js               # Express server setup
-├── socket.js               # Socket.io event handlers
-└── package.json            # Dependencies
+```text
+LITTLE_PAWS final/
+├── client/                  # React Frontend (Vercel)
+│   ├── src/
+│   │   ├── components/      # Modular UI & Feature-specific components
+│   │   ├── pages/           # Page-level route views (Auth, Shopping, Admin, Stray)
+│   │   ├── store/           # Redux Toolkit store and slices (auth, shop, cart)
+│   │   ├── hooks/           # use-socket.js, use-toast.js
+│   │   ├── lib/             # Firebase SDK, Socket.io client, helper libraries
+│   │   ├── App.jsx          # Root router & application controller
+│   │   └── main.jsx         # Client mount entry point
+│   ├── vite.config.js       # Vite build optimization config
+│   └── tailwind.config.js   # Tailwired Design System styles
+└── server/                  # Node.js + Express Backend (Render)
+    ├── models/              # Custom MySQL schemas inheriting _base.js
+    ├── controllers/         # Core business logic (auth, shop, pet, chat)
+    ├── routes/              # Express API Route endpoints
+    ├── middlewares/         # auth.middleware.js (JWT validation & Role checks)
+    ├── helpers/             # Multer upload, Kafka Producer, firebaseAdmin
+    ├── db/                  # mysql.js (Connection pooler & database initializer)
+    ├── config/              # mail.js (Nodemailer SMTP transport setup)
+    ├── utils/               # sendEmail.js (Nodemailer template wrappers)
+    ├── socket.js            # Socket.io connection & event coordinator
+    └── server.js            # Main Express application initialization
 ```
 
 ---
 
-## 🔐 Authentication System
+## 🔑 Environment Variables Setup
 
-### Methods Supported:
-1. **Email/Password** - Traditional registration and login
-2. **Google OAuth** - Google authentication via Firebase
-3. **Firebase Authentication** - Token-based verification
+To run Little Paws, you must create `.env` files in both the `client` and `server` root folders.
 
-### Key Routes:
-- `POST /auth/register` - User registration
-- `POST /auth/login` - Email/password login
-- `POST /auth/google` - Google sign-in
-- `POST /auth/forgot-password` - Password reset request
-- `POST /auth/reset-password` - Reset password with token
-- `POST /auth/logout` - User logout
-- `GET /auth/check-auth` - Verify JWT token
-- `GET /auth/check-firebase-auth` - Verify Firebase token
+### Client Environment Variables (`client/.env`)
+| Variable Name | Description | Example/Placeholder |
+|---|---|---|
+| `VITE_API_URL` | Base endpoint URL of the backend server | `http://localhost:5000` |
+| `VITE_FIREBASE_API_KEY` | Web API key for Firebase Authentication | `AIzaSyA1...` |
+| `VITE_FIREBASE_AUTH_DOMAIN` | Firebase project authentication domain | `little-paws-e4b81.firebaseapp.com` |
+| `VITE_FIREBASE_PROJECT_ID` | Firebase unique project identifier | `little-paws-e4b81` |
+| `VITE_FIREBASE_STORAGE_BUCKET` | Firebase cloud storage bucket name | `little-paws-e4b81.appspot.com` |
+| `VITE_FIREBASE_MESSAGING_SENDER_ID` | Sender ID for cloud messaging | `254878546592` |
+| `VITE_FIREBASE_APP_ID` | Firebase client application ID | `1:254878546592:web:...` |
 
-### Role-Based Access Control:
-- **user** - Regular pet adoption users
-- **shelterAdmin** - Shelter management personnel
-- **sellerAdmin** - E-commerce seller/admin
-- **admin** - Platform administrators
-
----
-
-## 🐾 Core Features
-
-### 1. **Pet Discovery & Search**
-- Browse all available pets for adoption
-- Advanced search with filters
-- Pet details page with images and information
-- Location-based pet search (using Leaflet maps)
-- Pet categories: dogs, cats, etc.
-- Health status tracking
-- Distance calculation from user location
-
-### 2. **Pet Adoption System**
-- Submit adoption applications
-- Track application status
-- Withdrawal capability
-- Form fields:
-  - Personal information
-  - Living conditions assessment
-  - Pet experience
-  - Adoption motivation details
-  - Shelter communication
-
-### 3. **Shelter Management**
-- Shelter admin dashboard
-- Pet listing management (add/edit/delete)
-- Pet workflow management
-- Application review and approval
-- Shelter information management
-- Contact management
-
-### 4. **Stray Pet Reporting**
-- Report stray/lost animals
-- Location marking with coordinates
-- Photo documentation
-- Status tracking (approved, pending)
-- Pickup eligibility marking
-
-### 5. **E-Commerce (Pet Supplies)**
-- Product catalog
-- Shopping cart
-- Product reviews and ratings
-- Wishlist functionality
-- Order management
-- Payment processing (Razorpay)
-- Address management for delivery
-- Order history and tracking
-
-### 6. **Real-Time Communication**
-- Chat system between users and shelters
-- Socket.io-based messaging
-- Real-time notifications
-- User presence tracking
-- Message persistence in database
-
-### 7. **Notification System**
-- Real-time notifications via Socket.io
-- Email notifications (Nodemailer)
-- Notification history
-- Role-based notifications (emit to roles)
-- User-specific notifications
-
-### 8. **Additional Features**
-- User profiles
-- City-based filtering
-- Image upload with multer local storage
-- Email verification
-- About Us page
-- Responsive design with Tailwind CSS
+### Backend Environment Variables (`server/.env`)
+| Variable Name | Description | Example/Placeholder |
+|---|---|---|
+| `PORT` | Local network port the server listens on | `5000` |
+| `CORS_ORIGIN` | Allowed clients (comma-separated for multi-client setup) | `http://localhost:5173` |
+| `CLIENT_URL` | Single fallback client redirection URL | `http://localhost:5173` |
+| `MYSQL_HOST` | Hostname of the MySQL database server | `127.0.0.1` (local) or Railway host |
+| `MYSQL_PORT` | Port number of the MySQL server | `3306` |
+| `MYSQL_USER` | MySQL database user name | `root` or Railway user |
+| `MYSQL_PASSWORD` | Secure MySQL database access password | `mypassword123` |
+| `MYSQL_DATABASE` | Targeted database instance name | `little_paws` |
+| `CLIENT_SECRET_KEY` | Secret key for hashing & signing JWT cookies | `super_secret_jwt_sign_key` |
+| `EMAIL_USER` | Gmail account address used by Nodemailer | `your_gmail_address@gmail.com` |
+| `EMAIL_PASS` | Gmail 16-character secure App Password | `abcd efgh ijkl mnop` |
+| `MAIL_FROM_NAME` | Display name for outbound platform emails | `Little Paws` |
+| `DISABLE_EMAIL` | Set to `true` to bypass Nodemailer sending locally | `false` |
+| `RAZORPAY_KEY_ID` | Razorpay Merchant Key ID | `rzp_test_SnXj16...` |
+| `RAZORPAY_SECRET` | Razorpay API Secret | `dX1eNP9fDTzA...` |
+| `FIREBASE_PROJECT_ID` | Firebase project identifier | `little-paws-e4b81` |
+| `FIREBASE_CLIENT_EMAIL` | Firebase service account client email | `firebase-adminsdk-fbsvc@...` |
+| `FIREBASE_PRIVATE_KEY` | Firebase Admin private key (include block syntax) | `"-----BEGIN PRIVATE KEY-----\nMIIE...\n"` |
 
 ---
 
-## 🔌 API Endpoints Summary
+## 💻 Local Installation & Setup
 
-### Authentication
-| Method | Endpoint | Purpose |
-|--------|----------|---------|
-| POST | `/auth/register` | Register new user |
-| POST | `/auth/login` | Login with email/password |
-| POST | `/auth/google` | Google OAuth login |
-| POST | `/auth/forgot-password` | Request password reset |
-| POST | `/auth/reset-password` | Reset password with token |
-| POST | `/auth/logout` | Logout user |
-| GET | `/auth/check-auth` | Verify JWT authentication |
-| GET | `/auth/check-firebase-auth` | Verify Firebase authentication |
+### Prerequisites
+- **Node.js** (v18.x or above)
+- **MySQL Server** (v8.x or above) installed locally and running.
+- **Git**
 
-### Pets
-| Method | Endpoint | Purpose |
-|--------|----------|---------|
-| GET | `/pets` | Get all pets |
-| GET | `/pets/:petId` | Get single pet details |
+### Step-by-Step Local Setup
 
-### Adoption
-| Method | Endpoint | Purpose |
-|--------|----------|---------|
-| * | `/adoption/*` | Adoption form submission, status tracking |
-
-### Shopping
-| Method | Endpoint | Purpose |
-|--------|----------|---------|
-| * | `/shop/products/*` | Product CRUD |
-| * | `/shop/cart/*` | Cart management |
-| * | `/shop/orders/*` | Order management |
-| * | `/shop/payment/*` | Payment processing |
-| * | `/shop/address/*` | Address management |
-
-### Shelter Management
-| Method | Endpoint | Purpose |
-|--------|----------|---------|
-| * | `/shelterAdmin/*` | Shelter admin operations |
-| * | `/shelter/*` | Shelter information |
-
-### Real-Time
-| Method | Endpoint | Purpose |
-|--------|----------|---------|
-| WebSocket | `/chat/*` | Chat messaging |
-| WebSocket | `/notification/*` | Notifications |
-| WebSocket | Socket.io events | Real-time updates |
-
----
-
-## 💾 Database Schema (MySQL)
-
-### Key Tables:
-1. **users** - User accounts with roles and Firebase integration
-2. **pets** - Pet listings with detailed info
-3. **adoption_forms** - Adoption applications
-4. **shelters** - Shelter organizations
-5. **products** - E-commerce products
-6. **orders** - Customer orders
-7. **carts** - Shopping carts
-8. **payments** - Payment records
-9. **chat** - Chat conversations
-10. **messages** - Individual chat messages
-11. **notifications** - User notifications
-12. **addresses** - Delivery addresses
-13. **reviews** - Product reviews
-14. **wishlists** - User wishlists
-15. **password_reset_tokens** - Password reset tokens
-
----
-
-## 🔄 Frontend State Management (Redux)
-
-### Store Slices:
-1. **auth** - Authentication state
-   - User information
-   - Authentication status
-   - Loading states
-   - Role management
-
-2. **shopProducts** - Product listing
-   - Products list
-   - Filters
-   - Sorting
-
-3. **shopCart** - Shopping cart
-   - Cart items
-   - Quantities
-   - Totals
-
-4. **shopAddress** - Delivery addresses
-   - Saved addresses
-   - Default address
-
-5. **shopOrder** - Order management
-   - Order history
-   - Order status
-
----
-
-## 🔌 Socket.io Events
-
-### Client -> Server Events:
-- `user:join` - User joins with userId and role
-- `chat:send-message` - Send chat message
-- Various notification events
-
-### Server -> Client Events:
-- Room-based emissions to `user:${userId}`
-- Role-based emissions to `role:${role}`
-- Broadcast notifications
-- Real-time updates on data changes
-
----
-
-## 🚀 Development & Build Scripts
-
-### Frontend (`client/`)
+#### 1. Clone the repository
 ```bash
-npm run dev          # Start dev server with Vite (port 5173)
-npm run build        # Build for production
-npm run preview      # Preview production build
-npm run lint         # Run ESLint
+git clone https://github.com/deepanshun2004/Little-Paws.git
+cd Little-Paws
 ```
 
-### Backend (`server/`)
+#### 2. Configure the local Database
+- Start your local MySQL service.
+- Open your MySQL CLI or workbench and create a new database:
+```sql
+CREATE DATABASE little_paws;
+```
+- Custom tables and pooled models are generated automatically by `server/db/mysql.js` on initial boot, so no manual table imports are necessary!
+
+#### 3. Setup Backend Server (`server`)
 ```bash
-npm run dev          # Start with nodemon (auto-reload)
-npm start            # Start server (port 5000)
+cd server
+npm install
+# Copy the env example and configure with your local MySQL password and credentials
+cp .env.example .env
+```
+- Open `.env` and fill in your database username (`root`), password, port, and key parameters.
+
+#### 4. Setup Frontend Client (`client`)
+```bash
+cd ../client
+npm install
+# Copy the env example and fill out your Firebase credentials
+cp .env.example .env
 ```
 
 ---
 
-## 🔐 Security Features
+## 🏃 Running Locally
 
-1. **JWT Authentication** - Token-based auth with signing
-2. **Password Hashing** - bcryptjs for secure password storage
-3. **Firebase Auth** - Integration with Firebase security
-4. **CORS Configuration** - Restricted to specific origin
-5. **Cookie Security** - Secure cookie handling
-6. **Role-Based Access Control** - Middleware-based authorization
-7. **Token Verification** - JWT and Firebase token validation
+To run the application locally, you can start both servers concurrently or open two terminal sessions.
 
----
+### Start Backend Server
+```bash
+cd server
+npm run dev
+```
+- The API server will boot up and automatically initialize the MySQL schema. You will see a `[DB] MySQL connected` log, alongside a `[Email] SMTP Transporter successfully verified` confirmation once Nodemailer authenticates with Gmail SMTP.
 
-## 🛠️ Configuration Files
-
-### Frontend
-- **vite.config.js** - Vite build configuration with React plugin
-- **tailwind.config.js** - Tailwind CSS theme and styling
-- **eslint.config.js** - Code linting rules
-- **postcss.config.js** - PostCSS processing
-- **jsconfig.json** - JavaScript configuration with path aliases
-
-### Backend
-- **package.json** - Dependencies and scripts
-- **.env** - Environment variables (not in repo, local only)
-
-### Environment Variables Required:
-**Frontend (.env):**
-- `VITE_API_URL`
-- `VITE_FIREBASE_API_KEY`
-- `VITE_FIREBASE_AUTH_DOMAIN`
-- `VITE_FIREBASE_PROJECT_ID`
-- `VITE_FIREBASE_STORAGE_BUCKET`
-- `VITE_FIREBASE_MESSAGING_SENDER_ID`
-- `VITE_FIREBASE_APP_ID`
-
-**Backend (.env):**
-- `PORT` (default: 5000)
-- `CORS_ORIGIN`
-- `MYSQL_HOST`
-- `MYSQL_PORT`
-- `MYSQL_USER`
-- `MYSQL_PASSWORD`
-- `MYSQL_DATABASE`
-- `CLIENT_SECRET_KEY` (for JWT signing)
-- `EMAIL_USER` (Gmail for Nodemailer)
-- `EMAIL_PASS` (Gmail app password)
-- `RAZORPAY_API_KEY`, `RAZORPAY_API_SECRET`
-- Firebase admin credentials
-- Kafka broker configuration
+### Start Frontend Client
+```bash
+cd client
+npm run dev
+```
+- The Vite development server will start at `http://localhost:5173`. Open this URL in your web browser.
 
 ---
 
-## 📊 Integrations
+## 🚀 Production Deployment Setup
 
-1. **Firebase** - Authentication and user management
-2. **Razorpay** - Payment processing
-3. **Nodemailer** - Email delivery
-4. **Google APIs** - Various Google service integrations
-5. **Kafka** - Message queue (for async operations)
-6. **Leaflet** - Map visualization for pet location
+### 1. Database Deployment on Railway MySQL
+1. Log in to [Railway.app](https://railway.app/) and create a new project.
+2. Select **Provision MySQL**.
+3. Under the Variables tab, copy the database connection details: `MYSQLHOST`, `MYSQLPORT`, `MYSQLUSER`, `MYSQLPASSWORD`, and `MYSQLDATABASE`.
+4. Run your initial migration by pointing your local client connection to the Railway variables temporarily, or let the Render backend automatically run the initialization scripts upon initial startup.
 
----
+### 2. Backend Deployment on Render
+1. Register/log in to [Render.com](https://render.com/).
+2. Select **New** -> **Web Service**.
+3. Link your GitHub repository.
+4. Set the following build configurations:
+   - **Root Directory:** `server`
+   - **Build Command:** `npm install`
+   - **Start Command:** `node server.js`
+5. In the **Environment Variables** section, configure the complete set of variables matching `server/.env` (pointing `MYSQL_*` parameters to your Railway variables).
+6. Enable Cookie Security: Ensure `CORS_ORIGIN` matches the deployed Vercel frontend address.
 
-## 🎨 UI/UX Features
-
-- **Responsive Design** - Mobile-first Tailwind CSS
-- **Component Library** - Radix UI components
-- **Dark Mode Support** - Tailwind dark mode config
-- **Custom UI Components** - shadcn/ui style components
-- **Icons** - Lucide React icons
-- **Animations** - Tailwind CSS animations
-- **Toast Notifications** - Custom toaster component
-
----
-
-## 🔍 Key Architectural Patterns
-
-1. **MVC Pattern** - Models, Controllers, Routes separation
-2. **Middleware Architecture** - Express middleware for auth/validation
-3. **Redux Store** - Centralized state management
-4. **Socket.io Rooms** - User and role-based room grouping
-5. **Base Model Class** - ORM-like pattern for database models
-6. **Custom Hooks** - React hooks for socket and toast logic
+### 3. Frontend Deployment on Vercel
+1. Log in to [Vercel.com](https://vercel.com/) and click **Add New** -> **Project**.
+2. Select your GitHub repository.
+3. In the project setup panel:
+   - **Framework Preset:** Vite
+   - **Root Directory:** `client`
+   - **Build Command:** `npm run build`
+   - **Output Directory:** `dist`
+4. Add all required client environment variables (including `VITE_API_URL` pointing to your deployed Render URL).
+5. Click **Deploy**. Vercel will build the frontend bundle and supply a secure HTTPS deployment link.
 
 ---
 
-## 📈 Scalability Considerations
+## 🔌 API Communication & Security Handles
 
-1. **Database** - MySQL with connection pooling
-2. **File Storage** - Multer local uploads served from `/uploads`
-3. **Real-time** - Socket.io for scalable WebSocket
-4. **Message Queue** - Kafka for async processing
-5. **Caching** - Could leverage Redis (not currently implemented)
-6. **API** - Stateless REST + WebSocket architecture
+### CORS Handling
+The server employs Express-level CORS configuration to permit credentialed HTTP requests while preventing unauthorized cross-origin requests.
+```js
+const corsOptions = {
+  origin(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error(`Origin ${origin} is not allowed by CORS`));
+  },
+  methods: ["GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS"],
+  credentials: true,
+};
+```
 
----
+### Production Cookie Handling
+To support secure session control, the application signs and issues JWT tokens inside HTTP-only cookies.
+- **Development:** Cookies are transmitted over standard HTTP with `SameSite: "lax"`.
+- **Production:** Cookies are configured with `secure: true`, `sameSite: "none"` (enabling cross-origin authentication across Vercel and Render), and `httpOnly: true` (blocking client-side JavaScript access to prevent XSS attacks).
 
-## 🐛 Code Quality
-
-- **ESLint** - JavaScript linting enabled
-- **Vite** - Modern build tool with fast refresh
-- **Redux Toolkit** - Best practices for state management
-- **Modular Structure** - Well-organized file structure
-- **Separation of Concerns** - Clear division between frontend/backend
-
----
-
-## 📝 Summary Statistics
-
-| Metric | Count |
-|--------|-------|
-| Frontend Dependencies | ~20 |
-| Backend Dependencies | ~16 |
-| Database Models | 15 |
-| API Routes | 8+ main route files |
-| React Components | 15+ component directories |
-| Page Routes | 15+ distinct pages |
-| User Roles | 4 (user, shelterAdmin, sellerAdmin, admin) |
-| Core Features | 8+ major features |
+### Socket Connection Handling
+Socket.IO handles real-time messaging and events, dynamically adapting to the environment. In production, the client establishes an active WebSocket handshake using the Render backend URL with `withCredentials: true` to authenticate socket sessions safely.
 
 ---
 
-## 🎯 Primary Use Cases
+## 🛠️ Troubleshooting & Support
 
-1. **Pet Adoption** - Users browse and adopt pets from shelters
-2. **Pet Reporting** - Report stray/lost animals
-3. **Shelter Management** - Shelter admins manage pet listings
-4. **E-Commerce** - Purchase pet supplies and accessories
-5. **Real-Time Communication** - Chat between users and shelters
-6. **Application Tracking** - Monitor adoption application status
-7. **Notifications** - Real-time updates on applications and orders
-8. **User Profiles** - Account management and preferences
+### 1. Nodemailer SMTP Connection Timeout
+- **Problem:** Server fails to boot or logs SMTP connection timeout.
+- **Fix:** Make sure your `EMAIL_PASS` is a **Gmail App Password** (16 characters) and not your standard email account password. Two-factor authentication (2FA) must be active on your Google Account to generate an App Password.
+- **Local Bypassing:** Set `DISABLE_EMAIL=true` in your `server/.env` to run the authentication flow locally without sending active emails.
+
+### 2. Multer Image Upload Disappearing on Render
+- **Problem:** Profile pictures, pet photos, or stray animal reports disappear after a few hours or server restarts.
+- **Fix:** Render instances use an ephemeral filesystem by default; files written to `/uploads` are cleared when the server sleeps or rebuilds. In production, attach a **Render Disk** to mount `/uploads` to persistent physical storage, or transition helper/upload code to an S3-compatible cloud bucket.
+
+### 3. Google OAuth Redirect Issues
+- **Problem:** "Unable to verify Google sign-in" or 401 response during login.
+- **Fix:** Ensure the active Google Web Client ID and Firebase Configuration domains match the registered origins in the Firebase Auth console.
 
 ---
 
-**Last Updated:** May 10, 2026  
-**Version:** 1.0.0
+## 🔮 Future Improvements
 
-
+1. **Persistent Cloud Storage:** Integrate AWS S3 or Cloudinary SDK in `server/helpers/upload.js` to decouple images from the server container entirely.
+2. **Advanced Chat Persistence:** Integrate Redis caching layers to store active chat handshakes and user presence details.
+3. **Advanced Shelter Verification:** Introduce a system administrator queue to vet and authorize animal shelters using official NGO registration forms.
+4. **Enhanced Offline Sync:** Implement service worker caching and IndexedDB offline queues to allow users to compile stray pet reports in zero-connectivity environments.
