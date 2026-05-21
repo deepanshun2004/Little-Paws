@@ -1,8 +1,10 @@
-const transporter = require("../config/mail");
+const { Resend } = require("resend");
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 // Base HTML styling for LITTLE_PAWS branding
 const baseEmailTemplate = (title, content) => `
-  <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-w-lg; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
+  <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px;">
     <div style="text-align: center; margin-bottom: 20px;">
       <h1 style="color: #f43f5e; margin: 0;">LITTLE PAWS 🐾</h1>
     </div>
@@ -19,19 +21,41 @@ const baseEmailTemplate = (title, content) => `
 
 const sendMailWrapper = async (mailOptions) => {
   if (process.env.DISABLE_EMAIL === "true") {
-    console.log("[Email] Email sending is disabled via DISABLE_EMAIL.");
+    console.log("[Email] Email sending disabled");
+    return { skipped: true };
+  }
+
+  if (!process.env.RESEND_API_KEY) {
+    console.warn("[Email] Warning: RESEND_API_KEY is not defined. Skipping email sending.");
     return { skipped: true };
   }
 
   try {
-    const info = await transporter.sendMail({
-      from: `"${process.env.MAIL_FROM_NAME || "Little Paws"}" <${process.env.EMAIL_USER}>`,
-      ...mailOptions,
+    const { data, error } = await resend.emails.send({
+      from: "Little Paws <onboarding@resend.dev>",
+      to: mailOptions.to,
+      subject: mailOptions.subject,
+      html: mailOptions.html,
     });
-    console.log(`[Email] Success: Email sent to ${mailOptions.to} (${info.messageId})`);
-    return info;
+
+    if (error) {
+      console.error("[Email] Resend API Error sending email:", {
+        message: error.message,
+        name: error.name,
+        code: error.code,
+      });
+      const resendError = new Error(error.message || "Resend API Error");
+      resendError.code = error.code;
+      throw resendError;
+    }
+
+    console.log(`[Email] Success: Email sent to ${mailOptions.to}. ID: ${data?.id}`);
+    return data;
   } catch (error) {
-    console.error("[Email] Error sending email:", error.message);
+    console.error("[Email] Detailed Error sending email:", {
+      message: error.message,
+      stack: error.stack,
+    });
     throw error;
   }
 };
